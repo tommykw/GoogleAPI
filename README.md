@@ -1,5 +1,5 @@
 # GoogleAPI
-Attempt to use Google API
+Attempt to use Google API. The Google API was implemented in the Object Composite Pattern.
 
-# Google API composite class
+# Implemented Google API 
 - Google Map
