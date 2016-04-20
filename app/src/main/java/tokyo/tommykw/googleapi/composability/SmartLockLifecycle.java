@@ -1,5 +1,7 @@
 package tokyo.tommykw.googleapi.composability;
 
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 
 /**
@@ -7,11 +9,17 @@ import android.support.v4.app.FragmentActivity;
  */
 public interface SmartLockLifecycle {
     void onCreate(FragmentActivity activity);
-    void onActivityResultForRequest(int requestCode, int resultCode, RequesterCallback callback);
-    void onActivityResultForSave(int requestCode, int resultCode, SaverCallback callback);
+    void onActivityResultForRequest(int requestCode,
+                                    int resultCode,
+                                    @Nullable Intent data,
+                                    RequesterCallback callback);
+
+    void onActivityResultForSave(int requestCode,
+                                 int resultCode,
+                                 SaverCallback callback);
 
     interface RequesterCallback {
-        void onSucceed();
+        void onSucceed(String id, String password);
         void onFailed();
     }
 
