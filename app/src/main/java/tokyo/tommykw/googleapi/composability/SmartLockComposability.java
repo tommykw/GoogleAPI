@@ -2,6 +2,7 @@ package tokyo.tommykw.googleapi.composability;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,8 @@ import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.credentials.CredentialRequest;
 import com.google.android.gms.auth.api.credentials.CredentialRequestResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
 /**
@@ -69,10 +72,25 @@ public class SmartLockComposability implements SmartLockLifecycle {
         }
     }
 
-    public void sendRequest(Activity activity, RequesterCallback callback) {
+    public void sendRequest(final Activity activity, final RequesterCallback callback) {
         CredentialRequest credentialRequest = new CredentialRequest.Builder().build();
         Auth.CredentialsApi.request(googleApiClient, credentialRequest)
-                .setResultCallback(null);
+                .setResultCallback(new ResultCallback() {
+                    @Override
+                    public void onResult(@NonNull Result result) {
+                        if (result.getStatus().isSuccess()) {
+                            // TODO
+                        } else if (result.getStatus().hasResolution()) {
+                            try {
+                                result.getStatus().startResolutionForResult(activity, RC_REQUEST);
+                            } catch (IntentSender.SendIntentException e) {
+                                callback.onFailed();
+                            }
+                        } else {
+                            callback.onFailed();
+                        }
+                    }
+                });
     }
 
     public void saveRequest(Activity activity,
@@ -80,6 +98,22 @@ public class SmartLockComposability implements SmartLockLifecycle {
                             String password,
                             SaverCallback callback) {
         Credential credential = new Credential.Builder(id).setPassword(password).build();
-        Auth.CredentialsApi.save(googleApiClient, credential);
+        Auth.CredentialsApi.save(googleApiClient, credential)
+                .setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        
+                    }
+                });
+    }
+
+    private void credentialResultAction(Status status) {
+        if (status.isSuccess()) {
+
+        } else if (status.isCanceled()) {
+
+        } else if (status.isInterrupted()) {
+
+        }
     }
 }
