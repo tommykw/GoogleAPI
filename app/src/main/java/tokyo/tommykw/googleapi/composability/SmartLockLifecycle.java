@@ -19,12 +19,16 @@ public interface SmartLockLifecycle {
                                  SaverCallback callback);
 
     interface RequesterCallback {
-        void onSucceed(String id, String password);
-        void onFailed();
+        void onSuccess(String id, String password);
+        void onFail();
+        void onCanceled();
+        void onInterrupted();
     }
 
     interface SaverCallback {
-        void onSucceed();
-        void onFailed();
+        void onSuccess();
+        void onFail();
+        void onCanceled();
+        void onInterrupted();
     }
 }

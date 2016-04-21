@@ -54,9 +54,9 @@ public class SmartLockComposability implements SmartLockLifecycle {
         if (requestCode == RC_REQUEST) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-                callback.onSucceed(credential.getId(), credential.getPassword());
+                callback.onSuccess(credential.getId(), credential.getPassword());
             } else {
-                callback.onFailed();
+                callback.onFail();
             }
         }
     }
@@ -65,9 +65,9 @@ public class SmartLockComposability implements SmartLockLifecycle {
     public void onActivityResultForSave(int requestCode, int resultCode, SaverCallback callback) {
         if (requestCode == RC_SAVE) {
             if (resultCode == Activity.RESULT_OK) {
-                callback.onSucceed();
+                callback.onSuccess();
             } else {
-                callback.onFailed();
+                callback.onFail();
             }
         }
     }
@@ -84,10 +84,10 @@ public class SmartLockComposability implements SmartLockLifecycle {
                             try {
                                 result.getStatus().startResolutionForResult(activity, RC_REQUEST);
                             } catch (IntentSender.SendIntentException e) {
-                                callback.onFailed();
+                                callback.onFail();
                             }
                         } else {
-                            callback.onFailed();
+                            callback.onFail();
                         }
                     }
                 });
@@ -102,18 +102,28 @@ public class SmartLockComposability implements SmartLockLifecycle {
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        
+                        CREDENTIAL_RESULT result = credentialResultAction(status);
                     }
                 });
     }
 
-    private void credentialResultAction(Status status) {
+    private CREDENTIAL_RESULT credentialResultAction(Status status) {
         if (status.isSuccess()) {
-
+            return CREDENTIAL_RESULT.SUCCESS;
+        } else if (status.hasResolution()) {
+            return CREDENTIAL_RESULT.RESOLUTION;
         } else if (status.isCanceled()) {
-
+            return CREDENTIAL_RESULT.CANCEL;
         } else if (status.isInterrupted()) {
-
+            return CREDENTIAL_RESULT.INTERRUPT;
+        } else {
+            return CREDENTIAL_RESULT.FAIL;
         }
+    }
+
+    private enum CREDENTIAL_RESULT {
+        SUCCESS, RESOLUTION, CANCEL, INTERRUPT, FAIL
+
+
     }
 }
