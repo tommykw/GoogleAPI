@@ -4,3 +4,4 @@
 # Implemented Google API 
 - Google Map
 - Smart Lock
+- Face API
