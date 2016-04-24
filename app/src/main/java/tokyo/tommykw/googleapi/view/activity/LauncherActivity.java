@@ -1,4 +1,4 @@
-package tokyo.tommykw.googleapi.activity;
+package tokyo.tommykw.googleapi.view.activity;
 
 /**
  * This class that app launch class

@@ -1,4 +1,4 @@
-package tokyo.tommykw.googleapi.activity;
+package tokyo.tommykw.googleapi.view.activity;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import tokyo.tommykw.googleapi.R;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
