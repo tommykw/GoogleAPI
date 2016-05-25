@@ -5,3 +5,4 @@
 - Google Map
 - Smart Lock
 - Face API
+- Awareness API
